@@ -15,7 +15,7 @@ public class BPMManager : MonoBehaviour
             Destroy(this.gameObject);
         } else {
             BPMManagerInstance = this;
-            DontDestroyOnLoad(this.gameObject)
+            DontDestroyOnLoad(this.gameObject);
         }
     }
 
@@ -28,16 +28,16 @@ public class BPMManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        BeatDetection();
     }
 
     private void BeatDetection() {
         //Takte
         beatFull = false;
-        beatInterval = 60 / bpm;
+        beatInterval = 60 / bPM;
         beatTimer += Time.deltaTime;
 
-        if (beatTimer >= beatInterval {
+        if (beatTimer >= beatInterval) {
             beatTimer -= beatInterval;
             beatFull = true;
             beatCountFull++;
@@ -50,7 +50,7 @@ public class BPMManager : MonoBehaviour
         beatIntervalD8 = beatInterval / 8;
         beatTimerD8 += Time.deltaTime;
 
-        if (beatTimerD8 >= beatIntervalD8 {
+        if (beatTimerD8 >= beatIntervalD8) {
             beatTimerD8 -= beatIntervalD8;
             beatD8 = true;
             beatCountD8++;
