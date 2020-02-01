@@ -22,6 +22,6 @@ public class PlaySoundOnBeat : MonoBehaviour
     }
 
     public void playKick() {
-         soundManager.PlaySound(kick, 1);
+         soundManager.PlaySound(kick, 2);
     }
 }

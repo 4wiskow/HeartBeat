@@ -7,14 +7,13 @@ public class BPMDetectionManager : MonoBehaviour
     private List<float> taps;
     private float meanDelta;
 
-    public int accuracy;
+    public float accuracy;
     public float BPM;
 
     // Start is called before the first frame update
     void Start()
     {
         taps = new List<float>();
-        Debug.Log(accuracy);
         meanDelta = 0;
         BPM = 0;
     }
@@ -28,14 +27,17 @@ public class BPMDetectionManager : MonoBehaviour
 
             int numberOfDeltas = taps.Count - 1; 
 
-            float tolerance = meanDelta * ((100 - accuracy) / 100);
-
-            meanDelta = (meanDelta * numberOfDeltas + delta) / (numberOfDeltas + 1); 
+            float tolerance = meanDelta * (1.0f - accuracy);
+            Debug.Log("MeanDelta: " + meanDelta);
+            Debug.Log("Tolerance: " + tolerance);
+            Debug.Log("Delta: " + delta);
 
             if (delta > meanDelta + tolerance || delta < meanDelta - tolerance) {
                 Reset();
                 meanDelta = delta;
                 Debug.Log("reset");
+            } else {
+                meanDelta = (meanDelta * numberOfDeltas + delta) / (numberOfDeltas + 1); 
             }
 
             BPM = 60/meanDelta;
