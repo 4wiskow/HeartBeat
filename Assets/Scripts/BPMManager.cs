@@ -6,9 +6,9 @@ public class BPMManager : MonoBehaviour
 {
     private static BPMManager BPMManagerInstance;
     public float bPM;
-    private float beatInterval, beatTimer, beatIntervalD8, beatTimerD8;
-    public static bool beatFull, beatD8;
-    public static int beatCountFull, beatCountD8;
+    private float beatInterval, beatTimer, beatIntervalD16, beatTimerD16;
+    public static bool beatFull, beatD16;
+    public static int beatCountFull, beatCountD16;
 
     private void Awake() {
         if (BPMManagerInstance != null && BPMManagerInstance != this) {
@@ -17,12 +17,6 @@ public class BPMManager : MonoBehaviour
             BPMManagerInstance = this;
             DontDestroyOnLoad(this.gameObject);
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
     }
 
     // Update is called once per frame
@@ -45,16 +39,16 @@ public class BPMManager : MonoBehaviour
 
         }
 
-        //8tel
-        beatD8 = false;
-        beatIntervalD8 = beatInterval / 8;
-        beatTimerD8 += Time.deltaTime;
+        //16tel
+        beatD16 = false;
+        beatIntervalD16 = beatInterval / 16;
+        beatTimerD16 += Time.deltaTime;
 
-        if (beatTimerD8 >= beatIntervalD8) {
-            beatTimerD8 -= beatIntervalD8;
-            beatD8 = true;
-            beatCountD8++;
-            Debug.Log("D8");
+        if (beatTimerD16 >= beatIntervalD16) {
+            beatTimerD16 -= beatIntervalD16;
+            beatD16 = true;
+            beatCountD16++;
+            Debug.Log("D16");
         }
     }
 }

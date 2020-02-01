@@ -1,11 +1,17 @@
 fileFormatVersion: 2
-guid: de0845ad365463649a94fd49a9dcf0d9
+guid: dbc21d971915dd248b1daff433a0e301
 ModelImporter:
   serializedVersion: 26
   internalIDToNameTable:
   - first:
-      74: -344616397672777965
-    second: Armature|pump
+      74: 1989289236423521904
+    second: Default Take
+  - first:
+      74: 8247518718310724150
+    second: bump
+  - first:
+      74: -5252816984213320552
+    second: idle
   externalObjects: {}
   materials:
     importMaterials: 1
