@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayManager : MonoBehaviour
+public class PlaySoundOnBeat : MonoBehaviour
 {
     public SoundManager soundManager;
     public AudioClip kick;

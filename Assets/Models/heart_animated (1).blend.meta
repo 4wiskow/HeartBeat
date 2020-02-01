@@ -1,11 +1,8 @@
 fileFormatVersion: 2
-guid: de0845ad365463649a94fd49a9dcf0d9
+guid: 2648df7f3b6b04747b521a940d42b2bd
 ModelImporter:
   serializedVersion: 26
-  internalIDToNameTable:
-  - first:
-      74: -344616397672777965
-    second: Armature|pump
+  internalIDToNameTable: []
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -90,7 +87,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
