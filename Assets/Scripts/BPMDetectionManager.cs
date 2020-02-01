@@ -9,6 +9,7 @@ public class BPMDetectionManager : MonoBehaviour
 
     public float accuracy;
     public float BPM;
+    public BPMLabel BPMLabel;
 
     // Start is called before the first frame update
     void Start()
@@ -28,9 +29,6 @@ public class BPMDetectionManager : MonoBehaviour
             int numberOfDeltas = taps.Count - 1; 
 
             float tolerance = meanDelta * (1.0f - accuracy);
-            Debug.Log("MeanDelta: " + meanDelta);
-            Debug.Log("Tolerance: " + tolerance);
-            Debug.Log("Delta: " + delta);
 
             if (delta > meanDelta + tolerance || delta < meanDelta - tolerance) {
                 Reset();
@@ -40,8 +38,7 @@ public class BPMDetectionManager : MonoBehaviour
                 meanDelta = (meanDelta * numberOfDeltas + delta) / (numberOfDeltas + 1); 
             }
 
-            BPM = 60/meanDelta;
-            Debug.Log(BPM);
+            UpdateBPM();
         }
 
         taps.Add(currentTap);
@@ -49,5 +46,12 @@ public class BPMDetectionManager : MonoBehaviour
 
     void Reset() {
         this.taps = new List<float>();
+    }
+
+    void UpdateBPM()
+    {
+        BPM = 60 / meanDelta;
+        Debug.Log(BPM);
+        BPMLabel.setBPM((int) BPM);
     }
 }
