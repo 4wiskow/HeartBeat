@@ -7,11 +7,10 @@ using Random = UnityEngine.Random;
 
 public class MoveSegment : MonoBehaviour
 {
-    public float speed = -100;
+    public float speed = -1;
     public GameObject segment, rampSegment, bridgeSegment, obstacle;
-    public Dictionary<GameObject, float> segmentPrefabs;
     private List<GameObject> segments = new List<GameObject>();
-    public int nSegments = 50, killzoneBehindCamera = 1000;
+    public int nSegments = 10, killzoneBehindCamera = 10;
     private float distanceTravelled, speedMultiplier = 1f;
     public int rampOffSet;
     List<string> SegsDistribution;
@@ -20,8 +19,6 @@ public class MoveSegment : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-        segmentPrefabs = new Dictionary<GameObject, float>() { { segment, 0.9f }, { rampSegment, 0.1f } };
         SegsDistribution = Enumerable.Repeat("normal", (int) Math.Floor(0.8 * nSegments)).ToList();
         List<string> rampSegs = Enumerable.Repeat("ramp", (int)Math.Floor(0.1 * nSegments)).ToList();
         List<string> bridgeSegs = Enumerable.Repeat("bridge", (int)Math.Floor(0.1 * nSegments)).ToList();
@@ -30,7 +27,7 @@ public class MoveSegment : MonoBehaviour
 
         GameObject latestSegment = segment;
         segments.Add(Instantiate(segment));
-        for (int i = 0; i<50; i++)
+        for (int i = 0; i<nSegments; i++)
         {
             latestSegment = createNewSegment(latestSegment);
             segments.Add(latestSegment);
@@ -44,7 +41,7 @@ public class MoveSegment : MonoBehaviour
         int idx = UnityEngine.Random.Range(0, SegsDistribution.Count);
         string newSegmentID = SegsDistribution[idx];
         Vector3 position;
-        newSegmentID = latestSegment.tag == "ramp" ? "normal" : newSegmentID;
+        newSegmentID = latestSegment.tag == "special" ? "normal" : newSegmentID;
         switch(newSegmentID)
         {
             case "ramp":
@@ -52,7 +49,8 @@ public class MoveSegment : MonoBehaviour
                 latestSegment = Instantiate(rampSegment, position, Quaternion.Euler(-20f, 0f, 0f));
                 break;
             case "bridge":
-                position = new Vector3(Random.Range(-100, 100), 0, segmentSize * 10 + latestSegment.transform.position.z);
+                position = new Vector3(0, 0, segmentSize * 10 + latestSegment.transform.position.z);
+                Debug.Log(position);
                 latestSegment = Instantiate(bridgeSegment, position, Quaternion.identity);
                 break;
             default:
@@ -76,7 +74,7 @@ public class MoveSegment : MonoBehaviour
             Vector3 floorPos = latestSegment.transform.position;
             Vector3 floorScale = latestSegment.transform.localScale;
             float xPos = Random.Range(-(floorScale.x / 2), (floorScale.x / 2));
-            Vector3 obstaclePos = floorPos + new Vector3(xPos, 10f, 0f);
+            Vector3 obstaclePos = floorPos + new Vector3(xPos, 0f, 0f);
             GameObject newObstacle = Instantiate(obstacle, obstaclePos, Quaternion.identity);
             newObstacle.transform.parent = latestSegment.transform;
         }
