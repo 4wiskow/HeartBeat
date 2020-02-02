@@ -6,6 +6,8 @@ public class BPMDetectionManager : MonoBehaviour
 {
     private List<float> taps;
     private float meanDelta;
+    private GameObject player;
+    private GameObject game;
 
     public float accuracy;
     public float BPM;
@@ -18,6 +20,8 @@ public class BPMDetectionManager : MonoBehaviour
         taps = new List<float>();
         meanDelta = 0;
         BPM = 0;
+        player = GameObject.Find("Player");
+        game = GameObject.Find("Game");
     }
 
     void Update() {
@@ -51,6 +55,9 @@ public class BPMDetectionManager : MonoBehaviour
             }
 
             UpdateBPM();
+            player.GetComponent<PlayerMovement>().setBPM(BPM);
+            game.GetComponent<MoveSegment>().setSpeed(BPM);
+
         }
 
         taps.Add(currentTap);

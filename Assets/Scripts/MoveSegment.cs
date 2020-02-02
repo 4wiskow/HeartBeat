@@ -12,8 +12,9 @@ public class MoveSegment : MonoBehaviour
     private List<GameObject> segments = new List<GameObject>();
     public int nSegments = 10, killzoneBehindCamera = 10;
     private float distanceTravelled, speedMultiplier = 1f;
-    public int rampOffSet = 10;
+    public int rampOffSet = 5;
     List<string> SegsDistribution;
+    private float xBorderPath = 7;
 
 
     // Start is called before the first frame update
@@ -28,7 +29,7 @@ public class MoveSegment : MonoBehaviour
         SegsDistribution.AddRange(slowpassSegs);
 
         GameObject latestSegment = segment;
-        segments.Add(Instantiate(segment));
+        segments.Add(Instantiate(segment, new Vector3(0f, 0f, 0f), Quaternion.identity));
         for (int i = 0; i<nSegments; i++)
         {
             latestSegment = createNewSegment(latestSegment);
@@ -53,19 +54,23 @@ public class MoveSegment : MonoBehaviour
                 break;
             case "bridge":
                 Vector3 bridgeSize = bridgeSegment.GetComponent<Renderer>().bounds.size;
-                float randomBridgeX = Random.Range(-(segmentSize / 2) + bridgeSize.x / 2, (segmentSize / 2) - bridgeSize.x / 2);
+                float randomBridgeX = Random.Range(-(xBorderPath / 2) + bridgeSize.x / 2, (xBorderPath / 2) - bridgeSize.x / 2);
                 position = new Vector3(randomBridgeX, 0, bridgeSize.z / 2 + segmentSize / 2 + latestSegment.transform.position.z);
                 latestSegment = Instantiate(bridgeSegment, position, Quaternion.Euler(-90f, 0f, 0f));
                 break;
             case "slowpass":
                 Vector3 slowpassSize = slowpassSegment.GetComponent<Renderer>().bounds.size;
-                float randomSlowpassX = Random.Range(-(segmentSize / 2) + slowpassSize.x / 2, (segmentSize / 2) - slowpassSize.x / 2);
-                position = new Vector3(randomSlowpassX, 0, slowpassSize.z / 2 + segmentSize / 2 + latestSegment.transform.position.z);
-                latestSegment = Instantiate(slowpassSegment, position, Quaternion.Euler(-90f, 0f, 0f));
+                float randomSlowpassX = Random.Range(-(xBorderPath / 2) + slowpassSize.x / 2, (xBorderPath / 2) - slowpassSize.x / 2);
+                position = new Vector3(randomSlowpassX, -0.18f, slowpassSize.z / 2 + segmentSize / 2 + latestSegment.transform.position.z);
+                latestSegment = Instantiate(slowpassSegment, position, Quaternion.Euler(+90f, 0f, 0f));
                 break;
             default:
                 float normalSegmentSize = segment.GetComponent<Renderer>().bounds.size.z;
                 position = new Vector3(0, 0, normalSegmentSize / 2 + segmentSize / 2 + latestSegment.transform.position.z);
+                if(latestSegment.name == "Plane(Clone)")
+                {
+                    position += new Vector3(0f, 0f, rampOffSet);
+                }
                 latestSegment = Instantiate(segment, position, Quaternion.identity);
 
                 obstacleRandomSpawn(latestSegment);
