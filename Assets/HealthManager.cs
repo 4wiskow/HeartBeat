@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class HealthManager : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class HealthManager : MonoBehaviour
     private List<float> speedHistory = new List<float>();
     public int speedHistoryLength = 20;
     public BPMManager BPMManager;
+    public Text text;
+
+    public GameObject gameOver;
+
 
     // Start is called before the first frame update
     void Start()
@@ -50,7 +55,8 @@ public class HealthManager : MonoBehaviour
         {
             health -= 2;
         }
-        Debug.Log(health);
+
+        text.text = health.ToString();
 
         if(health < 1)
         {
@@ -62,6 +68,15 @@ public class HealthManager : MonoBehaviour
     private void GameOver()
     {
         BPMManager.Phase();
+        gameOver.SetActive(true);
+        StartCoroutine(Countdown());
+    }
+
+    private IEnumerator Countdown()
+    {
+        yield return new WaitForSeconds(2f);
+
+
         SceneManager.LoadScene(0);
     }
 }

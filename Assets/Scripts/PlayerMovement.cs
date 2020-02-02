@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -18,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     GameObject camera;
     private bool isBoostReady;
     public float boostSpeed = 1;
+    public GameObject gameOver;
 
     public List<float> SpeedHistory { get => speedHistory; set => speedHistory = value; }
 
@@ -41,7 +43,9 @@ public class PlayerMovement : MonoBehaviour
         Movement();
         if(transform.position.y < fallDownKillZone || transform.position.z < camera.transform.position.z)
         {
-            SceneManager.LoadScene(0);
+            gameOver.SetActive(true);
+            StartCoroutine(Countdown());
+
         }
         if(isBoostReady && transform.position.z < 0)
         {
@@ -72,7 +76,11 @@ public class PlayerMovement : MonoBehaviour
         //    rb.AddForce(transform.up * -20000);
        // }
     }
+   private IEnumerator Countdown()
+         {
+           yield return new WaitForSeconds(2f);
 
-
-
+            SceneManager.LoadScene(0);
+        }
+    
 }

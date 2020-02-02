@@ -12,11 +12,11 @@ public class MoveSegment : MonoBehaviour
     public List<GameObject> obstacles = new List<GameObject>();
     public Camera camera;
     private List<GameObject> segments = new List<GameObject>();
-    public int nSegments = 10, killzoneBehindCamera = 10;
+    public int nSegments = 100, killzoneBehindCamera = 1;
     private float distanceTravelled, speedMultiplier = 1f;
-    public int rampOffSet = 0;
+    public int rampOffSet = 10;
     List<string> SegsDistribution;
-    private float xBorderPath = 7;
+    private float xBorderPath = 3;
 
     public Text text;
 
@@ -25,8 +25,8 @@ public class MoveSegment : MonoBehaviour
     {
         SegsDistribution = Enumerable.Repeat("normal", (int) Math.Floor(0.5 * nSegments)).ToList();
         List<string> rampSegs = Enumerable.Repeat("ramp", (int)Math.Floor(0.1 * nSegments)).ToList();
-        List<string> bridgeSegs = Enumerable.Repeat("bridge", (int)Math.Floor(0.1 * nSegments)).ToList();
-        List<string> slowpassSegs = Enumerable.Repeat("slowpass", (int)Math.Floor(0.3 * nSegments)).ToList();
+        List<string> bridgeSegs = Enumerable.Repeat("bridge", (int)Math.Floor(0.5 * nSegments)).ToList();
+        List<string> slowpassSegs = Enumerable.Repeat("slowpass", (int)Math.Floor(0.1 * nSegments)).ToList();
         SegsDistribution.AddRange(rampSegs);
         SegsDistribution.AddRange(bridgeSegs);
         SegsDistribution.AddRange(slowpassSegs);
@@ -63,8 +63,8 @@ public class MoveSegment : MonoBehaviour
                 break;
             case "slowpass":
                 Vector3 slowpassSize = slowpassSegment.GetComponent<Renderer>().bounds.size;
-                float randomSlowpassX = Random.Range(-(xBorderPath / 2) + slowpassSize.x / 2, (xBorderPath / 2) - slowpassSize.x / 2);
-                position = new Vector3(randomSlowpassX, -0.18f, slowpassSize.z / 2 + segmentSize / 2 + latestSegment.transform.position.z);
+                //float randomSlowpassX = Random.Range(-(xBorderPath / 2) + slowpassSize.x / 2, (xBorderPath / 2) - slowpassSize.x / 2);
+                position = new Vector3(0f, -0.18f, slowpassSize.z / 2 + segmentSize / 2 + latestSegment.transform.position.z);
                 latestSegment = Instantiate(slowpassSegment, position, Quaternion.Euler(90f, 0f, 0f));
                 break;
             default:
@@ -144,6 +144,6 @@ public class MoveSegment : MonoBehaviour
 
     public void setSpeed (float speedBPM)
     {
-        speed = -Math.Min(speedBPM/7, 40);
+        speed = -Math.Min(speedBPM/10, 40);
     }
 }
