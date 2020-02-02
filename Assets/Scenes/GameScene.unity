@@ -146,10 +146,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 155843925}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4552d1745c67f245918803a704c31e4, type: 3}
+  m_Script: {fileID: 11500000, guid: b7ff612cb404dd74786ac38f35e80f5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
+  speed: -1
   segment: {fileID: 7996417434517412418, guid: 0b50fac9e20631c428de18471809cd26, type: 3}
   rampSegment: {fileID: 8133059887859975396, guid: 692b3517a48ef1744ae8ce6ec6de8af0,
     type: 3}
@@ -157,13 +157,10 @@ MonoBehaviour:
     type: 3}
   obstacle: {fileID: 3662885706097310793, guid: b9f93a1bab5174f4099833b6253c24e3,
     type: 3}
-  segments: []
-  nSegments: 50
-  killzoneBehindCamera: 1000
-  distanceTravelled: 0
-  speedMultiplier: 1
-  rampOffSet: 20
-  SegsDistribution: []
+  camera: {fileID: 615679526}
+  nSegments: 10
+  killzoneBehindCamera: 10
+  rampOffSet: 0
 --- !u!4 &155843927
 Transform:
   m_ObjectHideFlags: 0
@@ -297,17 +294,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 227880010}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35f4ce9f93b3c0541a43f3151f88f514, type: 3}
+  m_Script: {fileID: 11500000, guid: 36a22d3326d531f4d91d9abd3f401ed1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   horizontalSpeed: 100
   jumpForce: 4000
-  distanceTravelled: 0
-  fallDownKillZone: -100
-  rb: {fileID: 0}
-  isGrounded: 0
-  jump: {x: 0, y: 0, z: 0}
-  game: {fileID: 0}
 --- !u!1 &615679524
 GameObject:
   m_ObjectHideFlags: 0
@@ -384,7 +375,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 615679524}
-  m_LocalRotation: {x: 0.29203278, y: -0, z: -0, w: 0.95640826}
+  m_LocalRotation: {x: 0.2920328, y: -0, z: -0, w: 0.9564083}
   m_LocalPosition: {x: -0.008, y: 2.5, z: -2.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []

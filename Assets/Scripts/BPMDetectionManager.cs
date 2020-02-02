@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BPMDetectionManager : MonoBehaviour
 {
     private List<float> taps;
     private float meanDelta;
+    private GameObject player;
 
+    private GameObject game;
     public float accuracy;
     public float BPM;
 
@@ -16,6 +19,8 @@ public class BPMDetectionManager : MonoBehaviour
         taps = new List<float>();
         meanDelta = 0;
         BPM = 0;
+        player = GameObject.Find("Player");
+        game = GameObject.Find("Game");
     }
     public void tap() {
         float currentTap = Time.fixedTime;
@@ -42,6 +47,8 @@ public class BPMDetectionManager : MonoBehaviour
 
             BPM = 60/meanDelta;
             Debug.Log(BPM);
+            game.GetComponent<MoveSegment>().setSpeed(BPM);
+            player.GetComponent<PlayerMovement>().setBPM(BPM);
         }
 
         taps.Add(currentTap);
@@ -50,4 +57,6 @@ public class BPMDetectionManager : MonoBehaviour
     void Reset() {
         this.taps = new List<float>();
     }
+
+ 
 }

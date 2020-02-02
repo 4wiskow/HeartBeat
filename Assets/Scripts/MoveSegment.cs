@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,10 +8,11 @@ public class MoveSegment : MonoBehaviour
 {
     public float speed = -1;
     public GameObject segment, rampSegment, bridgeSegment, obstacle;
+    public Camera camera;
     private List<GameObject> segments = new List<GameObject>();
     public int nSegments = 10, killzoneBehindCamera = 10;
     private float distanceTravelled, speedMultiplier = 1f;
-    public int rampOffSet;
+    public int rampOffSet = 10;
     List<string> SegsDistribution;
 
 
@@ -37,7 +37,7 @@ public class MoveSegment : MonoBehaviour
 
     private GameObject createNewSegment(GameObject latestSegment)
     {
-        float segmentSize = latestSegment.transform.localScale.z;
+        float segmentSize = latestSegment.GetComponent<Renderer>().bounds.size.z;
         int idx = UnityEngine.Random.Range(0, SegsDistribution.Count);
         string newSegmentID = SegsDistribution[idx];
         Vector3 position;
@@ -45,17 +45,20 @@ public class MoveSegment : MonoBehaviour
         switch(newSegmentID)
         {
             case "ramp":
-                position = new Vector3(0, 0, (segmentSize / 2) * 10 + latestSegment.transform.position.z);
+                float rampSize = rampSegment.GetComponent<Renderer>().bounds.size.z;
+                position = new Vector3(0, 0, segmentSize / 2 + latestSegment.transform.position.z);
                 latestSegment = Instantiate(rampSegment, position, Quaternion.Euler(-20f, 0f, 0f));
                 break;
             case "bridge":
-                position = new Vector3(0, 0, segmentSize * 10 + latestSegment.transform.position.z);
+                Vector3 bridgeSize = bridgeSegment.GetComponent<Renderer>().bounds.size;
+                float randomBridgeX = Random.Range(-(segmentSize / 2) + bridgeSize.x / 2, (segmentSize / 2) - bridgeSize.x / 2);
+                position = new Vector3(randomBridgeX, 0, bridgeSize.z / 2 + segmentSize / 2 + latestSegment.transform.position.z);
                 Debug.Log(position);
-                latestSegment = Instantiate(bridgeSegment, position, Quaternion.identity);
+                latestSegment = Instantiate(bridgeSegment, position, Quaternion.Euler(-90f, 0f, 0f));
                 break;
             default:
-                segmentSize = latestSegment.tag != "special" ? segmentSize : segmentSize + rampOffSet; //add space after ramp
-                position = new Vector3(0, 0, segmentSize * 10 + latestSegment.transform.position.z);
+                float normalSegmentSize = segment.GetComponent<Renderer>().bounds.size.z;
+                position = new Vector3(0, 0, normalSegmentSize / 2 + segmentSize / 2 + latestSegment.transform.position.z);
                 latestSegment = Instantiate(segment, position, Quaternion.identity);
 
                 obstacleRandomSpawn(latestSegment);
@@ -72,10 +75,11 @@ public class MoveSegment : MonoBehaviour
         if (rand < 20)
         {
             Vector3 floorPos = latestSegment.transform.position;
-            Vector3 floorScale = latestSegment.transform.localScale;
-            float xPos = Random.Range(-(floorScale.x / 2), (floorScale.x / 2));
-            Vector3 obstaclePos = floorPos + new Vector3(xPos, 0f, 0f);
-            GameObject newObstacle = Instantiate(obstacle, obstaclePos, Quaternion.identity);
+            float floorScaleX = latestSegment.GetComponent<Renderer>().bounds.size.x;
+            float obstacleSize = obstacle.GetComponent<Renderer>().bounds.size.x;
+            float xPos = Random.Range(-(floorScaleX / 2)+ obstacleSize / 2, (floorScaleX / 2)- obstacleSize / 2);
+            Vector3 obstaclePos = floorPos + new Vector3(xPos, 1f, 0f);
+            GameObject newObstacle = Instantiate(obstacle, obstaclePos, Quaternion.Euler(90f, 0f, 0f));
             newObstacle.transform.parent = latestSegment.transform;
         }
     }
@@ -92,7 +96,7 @@ public class MoveSegment : MonoBehaviour
         float moveBy = speedMultiplier * speed * Time.deltaTime;
         foreach (GameObject segment in segments)
         {
-            if ((segment.transform.position.z + moveBy) >= Camera.main.transform.position.z - killzoneBehindCamera)
+            if ((segment.transform.position.z + moveBy) >= camera.transform.position.z - killzoneBehindCamera)
             {
                 segment.transform.Translate(new Vector3(0f, 0f, moveBy), Space.World);
             }
@@ -102,7 +106,6 @@ public class MoveSegment : MonoBehaviour
             }
         }
         distanceTravelled += moveBy;
-        Debug.Log(distanceTravelled);
 
         if (!(toDestroy == null))
         {
@@ -115,5 +118,10 @@ public class MoveSegment : MonoBehaviour
             Destroy(toDestroy);
             toDestroy = null;
         }
+    }
+
+    public void setSpeed (float speedBPM)
+    {
+        speed = -speedBPM/10;
     }
 }
