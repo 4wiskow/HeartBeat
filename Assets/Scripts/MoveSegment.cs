@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using UnityEngine.UI;
 
 public class MoveSegment : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class MoveSegment : MonoBehaviour
     public int rampOffSet = 0;
     List<string> SegsDistribution;
     private float xBorderPath = 7;
+
+    public Text text;
 
     // Start is called before the first frame update
     void Start()
@@ -62,8 +65,7 @@ public class MoveSegment : MonoBehaviour
                 Vector3 slowpassSize = slowpassSegment.GetComponent<Renderer>().bounds.size;
                 float randomSlowpassX = Random.Range(-(xBorderPath / 2) + slowpassSize.x / 2, (xBorderPath / 2) - slowpassSize.x / 2);
                 position = new Vector3(randomSlowpassX, -0.18f, slowpassSize.z / 2 + segmentSize / 2 + latestSegment.transform.position.z);
-                Debug.Log(position);
-                latestSegment = Instantiate(slowpassSegment, position, Quaternion.Euler(+90f, 0f, 0f));
+                latestSegment = Instantiate(slowpassSegment, position, Quaternion.Euler(90f, 0f, 0f));
                 break;
             default:
                 float normalSegmentSize = segment.GetComponent<Renderer>().bounds.size.z;
@@ -107,6 +109,7 @@ public class MoveSegment : MonoBehaviour
     void Update()
     {
         moveAllSegments();
+        text.text = ((int) -distanceTravelled).ToString();
     }
 
     private void moveAllSegments()
@@ -141,6 +144,6 @@ public class MoveSegment : MonoBehaviour
 
     public void setSpeed (float speedBPM)
     {
-        speed = -Math.Min(speedBPM/10,20);
+        speed = -Math.Min(speedBPM/7, 40);
     }
 }

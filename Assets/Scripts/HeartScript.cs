@@ -12,9 +12,6 @@ public class HeartScript : MonoBehaviour
 
     public Animator animator;
 
-    private GameObject player = GameObject.Find("Player");
-    private GameObject game = GameObject.Find("Game");
-
     void OnCollisionEnter (Collision collisionInfo) {
         PlayManager.playKick();
         BPMDetectionManager.tap();
@@ -27,7 +24,6 @@ public class HeartScript : MonoBehaviour
     
         animator.SetTrigger("bump");
 
-        player.GetComponent<PlayerMovement>().setBPM(BPMDetectionManager.BPM);
-        game.GetComponent<MoveSegment>().setSpeed(BPMDetectionManager.BPM);
+ 
     }
 }

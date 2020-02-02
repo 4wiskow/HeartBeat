@@ -18,11 +18,10 @@ public class BPMDetectionManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         taps = new List<float>();
-        meanDelta = 0;
-        BPM = 0;
-        player = GameObject.Find("Player");
         game = GameObject.Find("RunGame");
+        BPMManager = GameObject.Find("BPMManager").GetComponent<BPMManager>();
 
     }
 
@@ -35,11 +34,12 @@ public class BPMDetectionManager : MonoBehaviour
                 BPMLabel.setBPM((int) BPM);
                 BPMManager.bPM = (int) BPM;
 
-                player.GetComponent<PlayerMovement>().setBPM(BPM);
+                game.GetComponent<HealthManager>().setBPM(BPM);
                 game.GetComponent<MoveSegment>().setSpeed(BPM);
             }
         }
     }
+
     public void tap() {
         float currentTap = Time.fixedTime;
 
@@ -62,7 +62,7 @@ public class BPMDetectionManager : MonoBehaviour
             }
 
             UpdateBPM();
-            player.GetComponent<PlayerMovement>().setBPM(BPM);
+            game.GetComponent<HealthManager>().setBPM(BPM);
             game.GetComponent<MoveSegment>().setSpeed(BPM);
 
 

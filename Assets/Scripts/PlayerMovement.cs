@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
     public float horizontalSpeed = 1f;
-    public int speedHistoryLength = 20;
+    
     public float jumpForce = 4000;
     private float distanceTravelled = 0;
     private float fallDownKillZone = -100;
@@ -17,6 +18,8 @@ public class PlayerMovement : MonoBehaviour
     GameObject camera;
     private bool isBoostReady;
     public float boostSpeed = 1;
+
+    public List<float> SpeedHistory { get => speedHistory; set => speedHistory = value; }
 
     // Start is called before the first frame update
     void Start()
@@ -38,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
         Movement();
         if(transform.position.y < fallDownKillZone || transform.position.z < camera.transform.position.z)
         {
-            transform.gameObject.SetActive(false);
+            SceneManager.LoadScene(0);
         }
         if(isBoostReady && transform.position.z < 0)
         {
@@ -58,36 +61,18 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.position += new Vector3(horizontalSpeed * Time.deltaTime, 0f, 0f);
         }
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-        {
+        //if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        //{
 
-            rb.AddForce(jump * jumpForce, ForceMode.Impulse);
-            isGrounded = false;
-        }
-        else
-        {
-            rb.AddForce(transform.up * -20000);
-        }
+        //    rb.AddForce(jump * jumpForce, ForceMode.Impulse);
+        //    isGrounded = false;
+       // }
+        //else
+       // {
+        //    rb.AddForce(transform.up * -20000);
+       // }
     }
 
-    public void setBPM(float bpm)
-    {
-        speedHistory.Add(bpm);
-        if(speedHistory.Count > speedHistoryLength)
-        {
-            speedHistory.RemoveAt(0);
-        }
-        float sum = 0;
-        foreach(float val in speedHistory)
-        {
-            sum += val;
-        }
-        float avg = sum / speedHistory.Count;
-        if (bpm < avg * 1.1 || bpm > avg * 0.9)
-        {
-            isBoostReady = true;
-            Debug.Log(isBoostReady);
-        }
-    }
+
 
 }

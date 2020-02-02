@@ -54,6 +54,5 @@ public class BPMManager : MonoBehaviour
         eighthTimer = 0;
         eighthCount = 0;
         eighthTimer = 0;
-        Debug.Log("Kickcounter :" + PlayManager.kickCounter);
     }
 }
