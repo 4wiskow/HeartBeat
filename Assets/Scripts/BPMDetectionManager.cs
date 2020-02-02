@@ -1,17 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class BPMDetectionManager : MonoBehaviour
 {
     private List<float> taps;
     private float meanDelta;
-    private GameObject player;
 
-    private GameObject game;
     public float accuracy;
     public float BPM;
+    public BPMLabel BPMLabel;
+    public BPMManager BPMManager;
 
     // Start is called before the first frame update
     void Start()
@@ -19,8 +18,16 @@ public class BPMDetectionManager : MonoBehaviour
         taps = new List<float>();
         meanDelta = 0;
         BPM = 0;
-        player = GameObject.Find("Player");
-        game = GameObject.Find("Game");
+    }
+
+    void Update() {
+        float delta = Time.fixedTime - taps[taps.Count - 1];
+
+        if (delta > 1.0f) {
+            BPM = 0;
+            BPMLabel.setBPM((int) BPM);
+            BPMManager.bPM = (int) BPM;
+        }
     }
     public void tap() {
         float currentTap = Time.fixedTime;
@@ -33,22 +40,17 @@ public class BPMDetectionManager : MonoBehaviour
             int numberOfDeltas = taps.Count - 1; 
 
             float tolerance = meanDelta * (1.0f - accuracy);
-            Debug.Log("MeanDelta: " + meanDelta);
-            Debug.Log("Tolerance: " + tolerance);
-            Debug.Log("Delta: " + delta);
 
             if (delta > meanDelta + tolerance || delta < meanDelta - tolerance) {
                 Reset();
                 meanDelta = delta;
                 Debug.Log("reset");
+                BPMManager.Phase();
             } else {
                 meanDelta = (meanDelta * numberOfDeltas + delta) / (numberOfDeltas + 1); 
             }
 
-            BPM = 60/meanDelta;
-            Debug.Log(BPM);
-            game.GetComponent<MoveSegment>().setSpeed(BPM);
-            player.GetComponent<PlayerMovement>().setBPM(BPM);
+            UpdateBPM();
         }
 
         taps.Add(currentTap);
@@ -58,5 +60,10 @@ public class BPMDetectionManager : MonoBehaviour
         this.taps = new List<float>();
     }
 
- 
+    void UpdateBPM()
+    {
+        BPM = 60 / meanDelta;
+        BPMLabel.setBPM((int) BPM);
+        BPMManager.bPM = (int) BPM;
+    }
 }

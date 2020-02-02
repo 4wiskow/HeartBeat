@@ -6,9 +6,9 @@ public class BPMManager : MonoBehaviour
 {
     private static BPMManager BPMManagerInstance;
     public float bPM;
-    private float beatInterval, beatTimer, beatIntervalD16, beatTimerD16;
-    public static bool beatFull, beatD16;
-    public static int beatCountFull, beatCountD16;
+    private float quarterInterval, quarterTimer, eighthInterval, eighthTimer;
+    public static bool quarter, eighth;
+    public static int quarterCount, eighthCount;
 
     private void Awake() {
         if (BPMManagerInstance != null && BPMManagerInstance != this) {
@@ -27,28 +27,33 @@ public class BPMManager : MonoBehaviour
 
     private void BeatDetection() {
         //Takte
-        beatFull = false;
-        beatInterval = 60 / bPM;
-        beatTimer += Time.deltaTime;
+        quarter = false;
+        quarterInterval = 60 / bPM;
+        quarterTimer += Time.deltaTime;
 
-        if (beatTimer >= beatInterval) {
-            beatTimer -= beatInterval;
-            beatFull = true;
-            beatCountFull++;
-            Debug.Log("Full");
-
+        if (quarterTimer >= quarterInterval) {
+            quarterTimer -= quarterInterval;
+            quarter = true;
+            quarterCount++;
         }
 
         //16tel
-        beatD16 = false;
-        beatIntervalD16 = beatInterval / 16;
-        beatTimerD16 += Time.deltaTime;
+        eighth = false;
+        eighthInterval = quarterInterval / 2;
+        eighthTimer += Time.deltaTime;
 
-        if (beatTimerD16 >= beatIntervalD16) {
-            beatTimerD16 -= beatIntervalD16;
-            beatD16 = true;
-            beatCountD16++;
-            Debug.Log("D16");
+        if (eighthTimer >= eighthInterval) {
+            eighthTimer -= eighthInterval;
+            eighth = true;
+            eighthCount++;
         }
+    }
+
+    public void Phase() {
+        quarterTimer = 0;
+        eighthTimer = 0;
+        eighthCount = 0;
+        eighthTimer = 0;
+        Debug.Log("Kickcounter :" + PlayManager.kickCounter);
     }
 }
