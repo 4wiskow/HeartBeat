@@ -15,7 +15,6 @@ public class MoveSegment : MonoBehaviour
     public int rampOffSet = 10;
     List<string> SegsDistribution;
 
-
     // Start is called before the first frame update
     void Start()
     {
