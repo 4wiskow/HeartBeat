@@ -6,13 +6,14 @@ public class BPMDetectionManager : MonoBehaviour
 {
     private List<float> taps;
     private float meanDelta;
-    private GameObject player;
-    private GameObject game;
 
     public float accuracy;
     public float BPM;
     public BPMLabel BPMLabel;
     public BPMManager BPMManager;
+
+    private GameObject player;
+    private GameObject game;
 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +22,8 @@ public class BPMDetectionManager : MonoBehaviour
         meanDelta = 0;
         BPM = 0;
         player = GameObject.Find("Player");
-        game = GameObject.Find("Game");
+        game = GameObject.Find("RunGame");
+
     }
 
     void Update() {
@@ -32,6 +34,9 @@ public class BPMDetectionManager : MonoBehaviour
                 BPM = 0;
                 BPMLabel.setBPM((int) BPM);
                 BPMManager.bPM = (int) BPM;
+
+                player.GetComponent<PlayerMovement>().setBPM(BPM);
+                game.GetComponent<MoveSegment>().setSpeed(BPM);
             }
         }
     }
@@ -59,6 +64,7 @@ public class BPMDetectionManager : MonoBehaviour
             UpdateBPM();
             player.GetComponent<PlayerMovement>().setBPM(BPM);
             game.GetComponent<MoveSegment>().setSpeed(BPM);
+
 
         }
 

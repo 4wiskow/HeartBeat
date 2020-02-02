@@ -6,23 +6,24 @@ using Random = UnityEngine.Random;
 
 public class MoveSegment : MonoBehaviour
 {
-    public float speed = -1;
+    public float speed = 0;
     public GameObject segment, rampSegment, bridgeSegment, obstacle, slowpassSegment;
+    public List<GameObject> obstacles = new List<GameObject>();
     public Camera camera;
     private List<GameObject> segments = new List<GameObject>();
     public int nSegments = 10, killzoneBehindCamera = 10;
     private float distanceTravelled, speedMultiplier = 1f;
-    public int rampOffSet = 5;
+    public int rampOffSet = 0;
     List<string> SegsDistribution;
     private float xBorderPath = 7;
 
     // Start is called before the first frame update
     void Start()
     {
-        SegsDistribution = Enumerable.Repeat("normal", (int) Math.Floor(0.7 * nSegments)).ToList();
+        SegsDistribution = Enumerable.Repeat("normal", (int) Math.Floor(0.5 * nSegments)).ToList();
         List<string> rampSegs = Enumerable.Repeat("ramp", (int)Math.Floor(0.1 * nSegments)).ToList();
         List<string> bridgeSegs = Enumerable.Repeat("bridge", (int)Math.Floor(0.1 * nSegments)).ToList();
-        List<string> slowpassSegs = Enumerable.Repeat("slowpass", (int)Math.Floor(0.1 * nSegments)).ToList();
+        List<string> slowpassSegs = Enumerable.Repeat("slowpass", (int)Math.Floor(0.3 * nSegments)).ToList();
         SegsDistribution.AddRange(rampSegs);
         SegsDistribution.AddRange(bridgeSegs);
         SegsDistribution.AddRange(slowpassSegs);
@@ -61,6 +62,7 @@ public class MoveSegment : MonoBehaviour
                 Vector3 slowpassSize = slowpassSegment.GetComponent<Renderer>().bounds.size;
                 float randomSlowpassX = Random.Range(-(xBorderPath / 2) + slowpassSize.x / 2, (xBorderPath / 2) - slowpassSize.x / 2);
                 position = new Vector3(randomSlowpassX, -0.18f, slowpassSize.z / 2 + segmentSize / 2 + latestSegment.transform.position.z);
+                Debug.Log(position);
                 latestSegment = Instantiate(slowpassSegment, position, Quaternion.Euler(+90f, 0f, 0f));
                 break;
             default:
@@ -83,13 +85,19 @@ public class MoveSegment : MonoBehaviour
     private void obstacleRandomSpawn(GameObject latestSegment)
     {
         int rand = Random.Range(0, 100);
-        if (rand < 20)
+        if (rand < 80)
         {
+            int randIdx = Random.Range(0, obstacles.Count);
+            obstacle = obstacles[randIdx];
+            float obstacleSize = obstacle.GetComponent<Renderer>().bounds.size.x;
+
             Vector3 floorPos = latestSegment.transform.position;
             float floorScaleX = latestSegment.GetComponent<Renderer>().bounds.size.x;
-            float obstacleSize = obstacle.GetComponent<Renderer>().bounds.size.x;
+            float floorScaleZ = latestSegment.GetComponent<Renderer>().bounds.size.z;
             float xPos = Random.Range(-(floorScaleX / 2)+ obstacleSize / 2, (floorScaleX / 2)- obstacleSize / 2);
-            Vector3 obstaclePos = floorPos + new Vector3(xPos, 1f, 0f);
+            float zPos = Random.Range(-(floorScaleZ / 2) + obstacleSize / 2, (floorScaleZ / 2) - obstacleSize / 2);
+            Vector3 obstaclePos = floorPos + new Vector3(xPos, 1f, zPos);
+
             GameObject newObstacle = Instantiate(obstacle, obstaclePos, Quaternion.Euler(90f, 0f, 0f));
             newObstacle.transform.parent = latestSegment.transform;
         }
@@ -133,6 +141,6 @@ public class MoveSegment : MonoBehaviour
 
     public void setSpeed (float speedBPM)
     {
-        speed = -speedBPM/10;
+        speed = -Math.Min(speedBPM/10,20);
     }
 }

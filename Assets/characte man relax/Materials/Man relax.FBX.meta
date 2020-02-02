@@ -736,8 +736,8 @@ ModelImporter:
       name: walk2
       takeName: 'Character _Man Relax '
       internalID: 0
-      firstFrame: 58
-      lastFrame: 95
+      firstFrame: 0
+      lastFrame: 1
       wrapMode: 2
       orientationOffsetY: 0
       level: 0
