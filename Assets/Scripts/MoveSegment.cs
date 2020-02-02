@@ -16,7 +16,6 @@ public class MoveSegment : MonoBehaviour
     List<string> SegsDistribution;
     private float xBorderPath = 7;
 
-
     // Start is called before the first frame update
     void Start()
     {

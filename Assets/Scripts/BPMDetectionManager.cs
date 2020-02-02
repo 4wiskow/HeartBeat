@@ -25,12 +25,14 @@ public class BPMDetectionManager : MonoBehaviour
     }
 
     void Update() {
-        float delta = Time.fixedTime - taps[taps.Count - 1];
+        if (taps.Count > 0) {
+            float delta = Time.fixedTime - taps[taps.Count - 1];
 
-        if (delta > 1.0f) {
-            BPM = 0;
-            BPMLabel.setBPM((int) BPM);
-            BPMManager.bPM = (int) BPM;
+            if (delta > 1.0f) {
+                BPM = 0;
+                BPMLabel.setBPM((int) BPM);
+                BPMManager.bPM = (int) BPM;
+            }
         }
     }
     public void tap() {
