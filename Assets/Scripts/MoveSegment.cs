@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 public class MoveSegment : MonoBehaviour
 {
     public float speed = -1;
-    public GameObject segment, rampSegment, bridgeSegment, obstacle;
+    public GameObject segment, rampSegment, bridgeSegment, obstacle, slowpassSegment;
     public Camera camera;
     private List<GameObject> segments = new List<GameObject>();
     public int nSegments = 10, killzoneBehindCamera = 10;
@@ -19,11 +19,13 @@ public class MoveSegment : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SegsDistribution = Enumerable.Repeat("normal", (int) Math.Floor(0.8 * nSegments)).ToList();
+        SegsDistribution = Enumerable.Repeat("normal", (int) Math.Floor(0.7 * nSegments)).ToList();
         List<string> rampSegs = Enumerable.Repeat("ramp", (int)Math.Floor(0.1 * nSegments)).ToList();
         List<string> bridgeSegs = Enumerable.Repeat("bridge", (int)Math.Floor(0.1 * nSegments)).ToList();
+        List<string> slowpassSegs = Enumerable.Repeat("slowpass", (int)Math.Floor(0.1 * nSegments)).ToList();
         SegsDistribution.AddRange(rampSegs);
         SegsDistribution.AddRange(bridgeSegs);
+        SegsDistribution.AddRange(slowpassSegs);
 
         GameObject latestSegment = segment;
         segments.Add(Instantiate(segment));
@@ -53,8 +55,13 @@ public class MoveSegment : MonoBehaviour
                 Vector3 bridgeSize = bridgeSegment.GetComponent<Renderer>().bounds.size;
                 float randomBridgeX = Random.Range(-(segmentSize / 2) + bridgeSize.x / 2, (segmentSize / 2) - bridgeSize.x / 2);
                 position = new Vector3(randomBridgeX, 0, bridgeSize.z / 2 + segmentSize / 2 + latestSegment.transform.position.z);
-                Debug.Log(position);
                 latestSegment = Instantiate(bridgeSegment, position, Quaternion.Euler(-90f, 0f, 0f));
+                break;
+            case "slowpass":
+                Vector3 slowpassSize = slowpassSegment.GetComponent<Renderer>().bounds.size;
+                float randomSlowpassX = Random.Range(-(segmentSize / 2) + slowpassSize.x / 2, (segmentSize / 2) - slowpassSize.x / 2);
+                position = new Vector3(randomSlowpassX, 0, slowpassSize.z / 2 + segmentSize / 2 + latestSegment.transform.position.z);
+                latestSegment = Instantiate(slowpassSegment, position, Quaternion.Euler(-90f, 0f, 0f));
                 break;
             default:
                 float normalSegmentSize = segment.GetComponent<Renderer>().bounds.size.z;
