@@ -23,9 +23,9 @@ public class MoveSegment : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SegsDistribution = Enumerable.Repeat("normal", (int) Math.Floor(0.5 * nSegments)).ToList();
+        SegsDistribution = Enumerable.Repeat("normal", (int) Math.Floor(0.7 * nSegments)).ToList();
         List<string> rampSegs = Enumerable.Repeat("ramp", (int)Math.Floor(0.1 * nSegments)).ToList();
-        List<string> bridgeSegs = Enumerable.Repeat("bridge", (int)Math.Floor(0.5 * nSegments)).ToList();
+        List<string> bridgeSegs = Enumerable.Repeat("bridge", (int)Math.Floor(0.1 * nSegments)).ToList();
         List<string> slowpassSegs = Enumerable.Repeat("slowpass", (int)Math.Floor(0.1 * nSegments)).ToList();
         SegsDistribution.AddRange(rampSegs);
         SegsDistribution.AddRange(bridgeSegs);
@@ -58,7 +58,7 @@ public class MoveSegment : MonoBehaviour
             case "bridge":
                 Vector3 bridgeSize = bridgeSegment.GetComponent<Renderer>().bounds.size;
                 float randomBridgeX = Random.Range(-(xBorderPath / 2) + bridgeSize.x / 2, (xBorderPath / 2) - bridgeSize.x / 2);
-                position = new Vector3(randomBridgeX, 0, bridgeSize.z / 2 + segmentSize / 2 + latestSegment.transform.position.z);
+                position = new Vector3(randomBridgeX, -0.18f, bridgeSize.z / 2 + segmentSize / 2 + latestSegment.transform.position.z);
                 latestSegment = Instantiate(bridgeSegment, position, Quaternion.Euler(-90f, 0f, 0f));
                 break;
             case "slowpass":
